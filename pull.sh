@@ -37,6 +37,8 @@ do
 done
 
 function exportdb () {
+	cd ${LOCAL_WORDPRESS_PATH}
+	
 	echo "===== Remote database export ====="
 	ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysqldump --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" ${DB_NAME}" > remote.sql
 

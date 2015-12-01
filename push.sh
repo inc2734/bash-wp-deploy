@@ -37,6 +37,8 @@ do
 done
 
 function exportdb () {
+	cd ${LOCAL_WORDPRESS_PATH}
+	
 	echo "===== Search replace =========="
 	wp search-replace ${LOCAL_URL} ${URL} > /dev/null
 
