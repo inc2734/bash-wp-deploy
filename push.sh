@@ -47,7 +47,7 @@ function exportdb () {
 	wp search-replace ${URL} ${LOCAL_URL} > /dev/null
 
 	echo "===== Import to temote database =========="
-	ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysql --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" ${DB_NAME}" < local.sql
+	ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysql --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" < local.sql
 }
 
 if [ "$a" = 1 ] ; then
