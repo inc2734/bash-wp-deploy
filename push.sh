@@ -12,7 +12,7 @@ function push () {
 		exclude="--exclude ${i} ${exclude}"
 	done
 
-	rsync -e "ssh -p ${SSH_PORT}" -rlptvz --delete --exclude .git/ --exclude .gitignore --exclude .sass-cache/ --exclude bin/ --exclude 'tmp/*' --exclude wp-config.php --exclude node_modules/ --exclude .DS_Store --exclude '*.sql' ${exclude} --exclude demo/ ${LOCAL_WORDPRESS_PATH}${path} ${SSH_USER}@${SSH_HOST}:${WORDPRESS_PATH}${path}
+	rsync -e "ssh -p ${SSH_PORT}" -rlptvz --delete --exclude .git/ --exclude .gitignore --exclude .sass-cache/ --exclude bin/ --exclude 'tmp/*' --exclude wp-config.php --exclude node_modules/ --exclude .DS_Store --exclude '*.sql' --exclude '.ht*' --exclude '*.log' ${exclude} --exclude demo/ ${LOCAL_WORDPRESS_PATH}${path} ${SSH_USER}@${SSH_HOST}:${WORDPRESS_PATH}${path}
 }
 
 while getopts awdtpue: opt
