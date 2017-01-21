@@ -1,6 +1,12 @@
 # bash-wp-deply
 
 ## Get started
+### Install WP-CLI and jq (for OSX)
+```
+$ brew install wp-cli jq
+```
+
+### Downloads bash-wp-deploy and Creates config
 ```
 $ git clone https://github.com/inc2734/bash-wp-deploy.git
 $ cd bash-wp-deploy
