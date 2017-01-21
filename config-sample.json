@@ -1,0 +1,46 @@
+{
+  "production": {
+    "mysql": {
+      "host": "localhost",
+      "name": "",
+      "user": "",
+      "password": ""
+    },
+    "server": {
+      "path": "/var/www/html",
+      "host": "example.com",
+      "port": "",
+      "protocol": "http"
+    },
+    "ssh": {
+      "user": "user",
+      "host": "example.com",
+      "port": "22"
+    }
+  },
+  "local": {
+    "mysql": {
+      "host": "localhost",
+      "name": "wp",
+      "user": "root",
+      "password": ""
+    },
+    "server": {
+      "path": "/Users/inc/htdocs/2inc.dev/www",
+      "host": "127.0.0.1",
+      "port": "8080",
+      "protocol": "http"
+    }
+  },
+  "ignore": [
+    ".git/",
+    ".gitignore",
+    ".sass-cache/",
+    "wp-config.php",
+    "node_modules/",
+    ".DS_Store",
+    "*.sql",
+    ".ht*",
+    "*.log"
+  ]
+}

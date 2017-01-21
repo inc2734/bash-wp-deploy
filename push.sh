@@ -1,81 +1,84 @@
-cwd=`dirname $0`
-. ${cwd}/variables.sh
+#!/usr/bin/env bash
 
-function push () {
-	local path=${1}
-	shift
-	local excludes=($@)
-	local exclude=;
-	
-	for i in ${excludes[@]}
-	do
-		exclude="--exclude ${i} ${exclude}"
-	done
+set -e;
 
-	rsync -e "ssh -p ${SSH_PORT}" -rlptvz --delete --exclude .git/ --exclude .gitignore --exclude .sass-cache/ --exclude bin/ --exclude 'tmp/*' --exclude wp-config.php --exclude node_modules/ --exclude .DS_Store --exclude '*.sql' --exclude '.ht*' --exclude '*.log' ${exclude} --exclude demo/ ${LOCAL_WORDPRESS_PATH}${path} ${SSH_USER}@${SSH_HOST}:${WORDPRESS_PATH}${path}
-}
+ROOT=$(cd $(dirname $0) && pwd)
+
+if [ ! -e "`which jq`" ]; then
+  echo "jq is not installed"
+  exit 0;
+fi
+
+if [ ! -e "`which wp`" ]; then
+  echo "WP-CLI is not installed"
+  exit 0;
+fi
+
+if !(mysql.server status | fgrep -q SUCCESS); then
+  echo "MySQL not started."
+  exit 0
+fi
+
+if [ ! -e ${ROOT}/config.json ]; then
+  echo "config.json is not found"
+  exit 0;
+fi
 
 while getopts awdtpue: opt
 do
-	case $opt in
-		a) a=1
-			;;
-		w) w=1
-			;;
-		d) d=1
-			;;
-		t) t=1
-			;;
-		p) p=1
-			;;
-		u) u=1
-			;;
-		e) e=1
-			environment=$OPTARG
-			;;
-	esac
+  case $opt in
+    a) a=1
+      ;;
+    w) w=1
+      ;;
+    d) d=1
+      ;;
+    t) t=1
+      ;;
+    p) p=1
+      ;;
+    u) u=1
+      ;;
+    e) e=1
+      ENVIRONMENT=$OPTARG
+      ;;
+  esac
 done
 
-function exportdb () {
-	cd ${LOCAL_WORDPRESS_PATH}
-	
-	echo "===== Search replace =========="
-	wp search-replace ${LOCAL_URL} ${URL} > /dev/null
+if [ ! -n "${ENVIRONMENT}" ]; then
+  echo "Please specify -e option"
+  exit 0;
+fi
 
-	echo "===== Local database export =========="
-	wp db export local.sql
-	wp search-replace ${URL} ${LOCAL_URL} > /dev/null
-
-	echo "===== Import to temote database =========="
-	ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysql --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" < local.sql
-}
+CONFIG_PATH=${ROOT}/config.json
+. ${ROOT}/bin/variables.sh
 
 if [ "$a" = 1 ] ; then
-	push /
-	exportdb
+  bash ${ROOT}/bin/push.sh ${ENVIRONMENT} /
+  bash ${ROOT}/bin/db-push.sh ${ENVIRONMENT}
 fi
 
 if [ "${w}" = 1 ] ; then
-	echo "===== Upload WordPress core ====="
-	excludes=(wp-content)
-	push / ${excludes[@]}
+  echo "===== Uploading WordPress Core ====="
+  EXCLUDES=(wp-content)
+  bash ${ROOT}/bin/push.sh ${ENVIRONMENT} / ${EXCLUDES}
 fi
 
 if [ "${d}" = 1 ] ; then
-	exportdb
+  bash ${ROOT}/bin/db-push.sh ${ENVIRONMENT}
 fi
 
 if [ "${t}" = 1 ] ; then
-	echo "===== Upload themes ====="
-	push /wp-content/themes/
+  echo "===== Uploading themes ====="
+  bash ${ROOT}/bin/push.sh ${ENVIRONMENT} /wp-content/themes/
 fi
 
 if [ "${p}" = 1 ] ; then
-	echo "===== Upload plugins ====="
-	push /wp-content/plugins/
+  echo "===== Uploading plugins ====="
+  bash ${ROOT}/bin/push.sh ${ENVIRONMENT} /wp-content/plugins/
 fi
 
 if [ "${u}" = 1 ] ; then
-	echo "===== Upload uploads ====="
-	push /wp-content/uploads/
+  echo "===== Uploading uploads ====="
+  bash ${ROOT}/bin/push.sh ${ENVIRONMENT} /wp-content/uploads/
 fi
