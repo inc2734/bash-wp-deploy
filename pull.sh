@@ -50,7 +50,7 @@ CONFIG_PATH=${ROOT}/config.json
 
 MYSQLADMIN_PING="mysqladmin ping -u ${LOCAL_DB_USER}";
 if [ -n "${LOCAL_DB_PASSWORD}" ]; then
-  MYSQLADMIN_PING+=" -p ${LOCAL_DB_PASSWORD}"
+  MYSQLADMIN_PING+=" -p${LOCAL_DB_PASSWORD}"
 fi
 
 if [ ! -e "`which mysqladmin`" ] || [ "`${MYSQLADMIN_PING}`" != "mysqld is alive" ]; then

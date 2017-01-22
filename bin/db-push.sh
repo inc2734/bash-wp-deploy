@@ -13,8 +13,8 @@ cd ${LOCAL_SERVER_PATH}
 
 echo "===== Exporting local database =========="
 wp db export local.sql
-wp search-replace ${LOCAL_SERVER_URL} ${SERVER_URL} --url=${LOCAL_SERVER_URL} --network > /dev/null
-wp search-replace ${LOCAL_SERVER_NAME} ${SERVER_NAME} --url=${LOCAL_SERVER_URL} --network > /dev/null
+wp search-replace ${LOCAL_SERVER_URL} ${SERVER_URL} --url=${LOCAL_SERVER_NAME} --network > /dev/null
+wp search-replace ${LOCAL_SERVER_NAME} ${SERVER_NAME} --url=${LOCAL_SERVER_NAME} --network > /dev/null
 wp db export for-remote.sql
 echo $(ls -la for-remote.sql)
 wp db import local.sql
