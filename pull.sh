@@ -14,11 +14,6 @@ if [ ! -e "`which wp`" ]; then
   exit 0;
 fi
 
-if !(mysql.server status | fgrep -q SUCCESS); then
-  echo "MySQL not started."
-  exit 0
-fi
-
 if [ ! -e ${ROOT}/config.json ]; then
   echo "config.json is not found"
   exit 0;
@@ -52,6 +47,16 @@ fi
 
 CONFIG_PATH=${ROOT}/config.json
 . ${ROOT}/bin/variables.sh
+
+MYSQLADMIN_PING="mysqladmin ping -u ${LOCAL_DB_USER}";
+if [ -n "${LOCAL_DB_PASSWORD}" ]; then
+  MYSQLADMIN_PING+=" -p ${LOCAL_DB_PASSWORD}"
+fi
+
+if [ ! -e "`which mysqladmin`" ] || [ "`${MYSQLADMIN_PING}`" != "mysqld is alive" ]; then
+  echo "MySQL not started."
+  exit 0
+fi
 
 if [ "$a" = 1 ] ; then
   bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} /
