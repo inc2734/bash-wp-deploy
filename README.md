@@ -1,5 +1,7 @@
 # bash-wp-deply
 
+**REQUIRED**: SSH, rsync, WP-CLI, jq
+
 ## Get started
 ### Install WP-CLI and jq (for OSX)
 ```
