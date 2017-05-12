@@ -11,6 +11,7 @@ DB_PASSWORD=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.mysql.password")
 SSH_USER=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.ssh.user")
 SSH_HOST=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.ssh.host")
 SSH_PORT=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.ssh.port")
+SSH_CONFIG=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.ssh.config")
 
 SERVER_PATH=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.server.path")
 SERVER_HOST=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.server.host")

@@ -21,4 +21,8 @@ do
   EXCLUDES+="--exclude=${i} "
 done
 
-rsync -e "ssh -p ${SSH_PORT}" -rlptvz --delete ${EXCLUDES} ${LOCAL_SERVER_PATH}${DIR} ${SSH_USER}@${SSH_HOST}:${SERVER_PATH}${DIR}
+if [ -n "${SSH_CONFIG}" ]; then
+  rsync -rlptvz --delete ${EXCLUDES} ${LOCAL_SERVER_PATH}${DIR} ${SSH_CONFIG}:${SERVER_PATH}${DIR}
+else
+  rsync -e "ssh -p ${SSH_PORT}" -rlptvz --delete ${EXCLUDES} ${LOCAL_SERVER_PATH}${DIR} ${SSH_USER}@${SSH_HOST}:${SERVER_PATH}${DIR}
+fi

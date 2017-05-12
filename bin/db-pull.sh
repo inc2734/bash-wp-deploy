@@ -12,7 +12,11 @@ CONFIG_PATH=${ROOT}/config.json
 cd ${LOCAL_SERVER_PATH}
 
 echo "===== Exporting remote database ====="
-ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysqldump --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" > remote.sql
+if [ -n "${SSH_CONFIG}" ]; then
+  ssh ${SSH_CONFIG} "mysqldump --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" > remote.sql
+else
+  ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysqldump --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" > remote.sql
+fi
 echo $(ls -la remote.sql)
 
 echo "===== Importing to local database from remote database ====="

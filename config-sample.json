@@ -15,7 +15,8 @@
     "ssh": {
       "user": "user",
       "host": "example.com",
-      "port": "22"
+      "port": "22",
+      "config": ""
     }
   },
   "local": {

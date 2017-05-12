@@ -20,4 +20,8 @@ echo $(ls -la for-remote.sql)
 wp db import local.sql
 
 echo "===== Importing to remote database from local database =========="
-ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysql --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" < for-remote.sql
+if [ -n "${SSH_CONFIG}" ]; then
+  ssh ${SSH_CONFIG} "mysql --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" < for-remote.sql
+else
+  ssh ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT} "mysql --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" < for-remote.sql
+fi
