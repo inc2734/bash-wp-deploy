@@ -1,4 +1,4 @@
-# bash-wp-deply
+# bash-wp-deploy
 
 **REQUIRED**: SSH, rsync, WP-CLI, jq
 
