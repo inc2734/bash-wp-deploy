@@ -19,15 +19,9 @@ else
 fi
 echo $(ls -la remote.sql)
 
-set +e
-wp config path
-if [ "$?" != 0 ]; then
-  echo "===== Generating local wp-config.php ====="
-  wp config create --dbname=${LOCAL_DB_NAME} --dbuser=${LOCAL_DB_USER} --dbpass=${LOCAL_DB_PASSWORD} --dbhost=${LOCAL_DB_HOST}
-fi
-set -e
-
 echo "===== Importing to local database from remote database ====="
+wp config path || wp config create --dbname=${LOCAL_DB_NAME} --dbuser=${LOCAL_DB_USER} --dbpass=${LOCAL_DB_PASSWORD} --dbhost=${LOCAL_DB_HOST}
+wp db check || wp db create
 wp db import remote.sql
 wp search-replace ${SERVER_URL} ${LOCAL_SERVER_URL} --url=${SERVER_NAME} --network > /dev/null
 wp search-replace ${SERVER_NAME} ${LOCAL_SERVER_NAME} --url=${SERVER_NAME} --network > /dev/null
