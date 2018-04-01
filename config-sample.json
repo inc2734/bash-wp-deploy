@@ -42,6 +42,7 @@
     ".DS_Store",
     "*.sql",
     ".ht*",
-    "*.log"
+    "*.log",
+    "bash-wp-deploy/"
   ]
 }
