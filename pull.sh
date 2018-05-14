@@ -14,12 +14,7 @@ if [ ! -e "`which wp`" ]; then
   exit 0;
 fi
 
-if [ ! -e ${ROOT}/config.json ]; then
-  echo "config.json is not found"
-  exit 0;
-fi
-
-while getopts awdtpue: opt
+while getopts awdtpue:f: opt
 do
   case $opt in
     a) a=1
@@ -37,15 +32,27 @@ do
     e) e=1
       ENVIRONMENT=$OPTARG
       ;;
+    f) f=1
+      CONFIG_FILE=$OPTARG
+      ;;
   esac
 done
+
+if [ "$f" = 1 ]; then
+  CONFIG_PATH=${CONFIG_FILE}
+else
+  CONFIG_PATH=${ROOT}/config.json
+fi
+if [ ! -e ${CONFIG_PATH} ]; then
+  echo "config.json is not found"
+  exit 0;
+fi
 
 if [ ! -n "${ENVIRONMENT}" ]; then
   echo "Please specify -e option"
   exit 0;
 fi
 
-CONFIG_PATH=${ROOT}/config.json
 . ${ROOT}/bin/variables.sh
 
 MYSQLADMIN_PING="mysqladmin ping -u ${LOCAL_DB_USER}";
@@ -59,31 +66,31 @@ if [ ! -e "`which mysqladmin`" ] || [ "`${MYSQLADMIN_PING}`" != "mysqld is alive
 fi
 
 if [ "$a" = 1 ] ; then
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} /
-  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT}
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /
+  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT} ${CONFIG_PATH}
 fi
 
 if [ "${w}" = 1 ] ; then
   echo "===== Downloading WordPress Core ====="
   EXCLUDES=(wp-content)
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} / ${EXCLUDES}
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} / ${EXCLUDES}
 fi
 
 if [ "${d}" = 1 ] ; then
-  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT}
+  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT} ${CONFIG_PATH}
 fi
 
 if [ "${t}" = 1 ] ; then
   echo "===== Downloading themes ====="
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} /wp-content/themes/
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /wp-content/themes/
 fi
 
 if [ "${p}" = 1 ] ; then
   echo "===== Downloading plugins ====="
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} /wp-content/plugins/
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /wp-content/plugins/
 fi
 
 if [ "${u}" = 1 ] ; then
   echo "===== Downloading uploads ====="
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} /wp-content/uploads/
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /wp-content/uploads/
 fi
