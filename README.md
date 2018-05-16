@@ -16,7 +16,7 @@ $ cp config-sample.json config.json
 $ vi config.json
 ```
 
-## Downlods
+## Downloads
 ### All files and database
 ```
 $ ./pull.sh -e production -a
@@ -76,4 +76,9 @@ $ ./push.sh -e production -u
 ### Database
 ```
 $ ./push.sh -e production -d
+```
+
+## Config file
+```
+$ ./pull.sh -e production -f any_config.json -a
 ```
