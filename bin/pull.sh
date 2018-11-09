@@ -23,7 +23,7 @@ do
 done
 
 if [ -n "${SSH_CONFIG}" ]; then
-  rsync -rlptvz ${EXCLUDES} ${SSH_CONFIG}:${SERVER_PATH}${DIR} ${LOCAL_SERVER_PATH}${DIR}
+  rsync -rlptvz --delete ${EXCLUDES} ${SSH_CONFIG}:${SERVER_PATH}${DIR} ${LOCAL_SERVER_PATH}${DIR}
 else
-  rsync -e "ssh -p ${SSH_PORT}" -rlptvz ${EXCLUDES} ${SSH_USER}@${SSH_HOST}:${SERVER_PATH}${DIR} ${LOCAL_SERVER_PATH}${DIR}
+  rsync -e "ssh -p ${SSH_PORT}" -rlptvz --delete ${EXCLUDES} ${SSH_USER}@${SSH_HOST}:${SERVER_PATH}${DIR} ${LOCAL_SERVER_PATH}${DIR}
 fi
