@@ -12,6 +12,10 @@ ROOT=$(cd $(dirname $0)/../ && pwd)
 
 cd ${LOCAL_SERVER_PATH}
 
+echo "===== Exporting local database =========="
+wp db export local.sql
+echo $(ls -la local.sql)
+
 echo "===== Exporting remote database ====="
 if [ -n "${SSH_CONFIG}" ]; then
   ssh ${SSH_CONFIG} "mysqldump --host=${DB_HOST} --user=${DB_USER} --password=\"${DB_PASSWORD}\" --default-character-set=utf8 ${DB_NAME}" > remote.sql
