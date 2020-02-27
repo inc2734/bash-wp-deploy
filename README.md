@@ -82,3 +82,8 @@ $ ./push.sh -e production -d
 ```
 $ ./pull.sh -e production -f any_config.json -a
 ```
+
+### Local environment name
+```
+$ ./pull.sh -e production -l local_name
+```
