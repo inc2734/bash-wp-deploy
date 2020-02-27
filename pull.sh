@@ -14,7 +14,7 @@ if [ ! -e "`which wp`" ]; then
   exit 0;
 fi
 
-while getopts awdtpue:f: opt
+while getopts awdtpue:f:l: opt
 do
   case $opt in
     a) a=1
@@ -35,6 +35,9 @@ do
     f) f=1
       CONFIG_FILE=$OPTARG
       ;;
+    l) l=1
+      LOCAL=$OPTARG
+      ;;
   esac
 done
 
@@ -53,6 +56,15 @@ if [ ! -n "${ENVIRONMENT}" ]; then
   exit 0;
 fi
 
+if [ "$l" != 1 ]; then
+  LOCAL=local
+fi
+
+if [ $(cat ${CONFIG_PATH} | jq ".${LOCAL} | length") -eq 0 ]; then
+  echo "'${LOCAL}' configuration is not found"
+  exit 0;
+fi
+
 . ${ROOT}/bin/variables.sh
 
 MYSQLADMIN_PING="mysqladmin ping -u ${LOCAL_DB_USER}";
@@ -66,31 +78,31 @@ if [ ! -e "`which mysqladmin`" ] || [ "`${MYSQLADMIN_PING}`" != "mysqld is alive
 fi
 
 if [ "$a" = 1 ] ; then
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /
-  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT} ${CONFIG_PATH}
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL} /
+  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL}
 fi
 
 if [ "${w}" = 1 ] ; then
   echo "===== Downloading WordPress Core ====="
   EXCLUDES=(wp-content)
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} / ${EXCLUDES}
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL} / ${EXCLUDES}
 fi
 
 if [ "${d}" = 1 ] ; then
-  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT} ${CONFIG_PATH}
+  bash ${ROOT}/bin/db-pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL}
 fi
 
 if [ "${t}" = 1 ] ; then
   echo "===== Downloading themes ====="
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /wp-content/themes/
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL} /wp-content/themes/
 fi
 
 if [ "${p}" = 1 ] ; then
   echo "===== Downloading plugins ====="
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /wp-content/plugins/
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL} /wp-content/plugins/
 fi
 
 if [ "${u}" = 1 ] ; then
   echo "===== Downloading uploads ====="
-  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} /wp-content/uploads/
+  bash ${ROOT}/bin/pull.sh ${ENVIRONMENT} ${CONFIG_PATH} ${LOCAL} /wp-content/uploads/
 fi
