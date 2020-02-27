@@ -6,6 +6,8 @@ ENVIRONMENT=${1}
 shift
 CONFIG_PATH=${1}
 shift
+LOCAL=${1}
+shift
 
 ROOT=$(cd $(dirname $0)/../ && pwd)
 . ${ROOT}/bin/variables.sh
