@@ -27,15 +27,15 @@ if [ -n "${SERVER_PORT}" ]; then
 fi
 
 # Local
-LOCAL_DB_HOST=$(cat ${CONFIG_PATH} | jq -r ".local.mysql.host")
-LOCAL_DB_NAME=$(cat ${CONFIG_PATH} | jq -r ".local.mysql.name")
-LOCAL_DB_USER=$(cat ${CONFIG_PATH} | jq -r ".local.mysql.user")
-LOCAL_DB_PASSWORD=$(cat ${CONFIG_PATH} | jq -r ".local.mysql.password")
+LOCAL_DB_HOST=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.mysql.host")
+LOCAL_DB_NAME=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.mysql.name")
+LOCAL_DB_USER=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.mysql.user")
+LOCAL_DB_PASSWORD=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.mysql.password")
 
-LOCAL_SERVER_PATH=$(cat ${CONFIG_PATH} | jq -r ".local.server.path")
-LOCAL_SERVER_HOST=$(cat ${CONFIG_PATH} | jq -r ".local.server.host")
-LOCAL_SERVER_PORT=$(cat ${CONFIG_PATH} | jq -r ".local.server.port")
-LOCAL_SERVER_PROTOCOL=$(cat ${CONFIG_PATH} | jq -r ".local.server.protocol")
+LOCAL_SERVER_PATH=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.server.path")
+LOCAL_SERVER_HOST=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.server.host")
+LOCAL_SERVER_PORT=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.server.port")
+LOCAL_SERVER_PROTOCOL=$(cat ${CONFIG_PATH} | jq -r ".${LOCAL}.server.protocol")
 LOCAL_SERVER_URL="${LOCAL_SERVER_PROTOCOL}://${LOCAL_SERVER_HOST}"
 if [ -n "${LOCAL_SERVER_PORT}" ]; then
   LOCAL_SERVER_URL="${LOCAL_SERVER_URL}:${LOCAL_SERVER_PORT}"

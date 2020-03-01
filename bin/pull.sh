@@ -6,6 +6,8 @@ ENVIRONMENT=${1}
 shift
 CONFIG_PATH=${1}
 shift
+LOCAL=${1}
+shift
 DIR=${1}
 shift
 
