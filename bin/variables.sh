@@ -4,6 +4,9 @@ set -e;
 
 # Encoding
 DB_CHARSET=$(cat ${CONFIG_PATH} | jq -r ".db_charset")
+if [ "${DB_CHARSET}" = "null" ]; then
+  DB_CHARSET="utf8"
+fi
 
 # Remote
 DB_HOST=$(cat ${CONFIG_PATH} | jq -r ".${ENVIRONMENT}.mysql.host")
