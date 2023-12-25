@@ -1,4 +1,5 @@
 {
+  "db_charset": "utf8",
   "production": {
     "mysql": {
       "host": "localhost",
